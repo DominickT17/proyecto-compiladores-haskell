@@ -24,3 +24,47 @@ Por ejemplo, en la instrucción:
 
 ```haskell
 edad = 20
+```
+
+se encuentran los siguientes lexemas:
+
+- `edad`
+- `=`
+- `20`
+
+## 4. Token
+
+Un token es la categoría que se asigna a un lexema reconocido por el
+analizador léxico.
+
+Para el ejemplo anterior se pueden asignar las siguientes categorías:
+
+| Lexema | Token |
+|---|---|
+| `edad` | IDENTIFICADOR |
+| `=` | OPERADOR_ASIGNACION |
+| `20` | NUMERO_ENTERO |
+
+El lexema representa el texto exacto encontrado en el código, mientras que el
+token representa la clasificación de ese texto.
+
+## 5. Alcance inicial
+
+El analizador léxico recibirá archivos fuente escritos en Haskell y deberá
+identificar inicialmente las siguientes categorías:
+
+- Palabras reservadas.
+- Identificadores.
+- Números enteros.
+- Números decimales.
+- Cadenas de texto.
+- Caracteres.
+- Valores booleanos.
+- Operadores.
+- Símbolos de agrupación.
+- Separadores.
+- Comentarios.
+- Caracteres no reconocidos.
+
+Cada categoría será documentada antes de escribir las expresiones regulares y
+acciones correspondientes en Flex.
