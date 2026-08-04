@@ -68,3 +68,38 @@ identificar inicialmente las siguientes categorías:
 
 Cada categoría será documentada antes de escribir las expresiones regulares y
 acciones correspondientes en Flex.
+## 6. Palabras reservadas
+
+Las palabras reservadas son términos que forman parte de la sintaxis del lenguaje Haskell. Estas palabras poseen un significado especial y no deben utilizarse como nombres de variables, funciones o tipos.
+
+Algunas palabras reservadas que reconocerá inicialmente el analizador son:
+
+- `module`
+- `where`
+- `import`
+- `data`
+- `type`
+- `class`
+- `instance`
+- `if`
+- `then`
+- `else`
+- `let`
+- `in`
+- `case`
+- `of`
+- `do`
+
+Por ejemplo:
+
+```haskell
+module Principal where
+
+main = do
+    let edad = 20
+    if edad >= 18
+        then print "Mayor de edad"
+        else print "Menor de edad"
+```
+
+En este ejemplo, los lexemas `module`, `where`, `do`, `let`, `if`, `then` y `else` se clasifican como palabras reservadas.
