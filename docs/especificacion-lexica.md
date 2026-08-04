@@ -103,3 +103,25 @@ main = do
 ```
 
 En este ejemplo, los lexemas `module`, `where`, `do`, `let`, `if`, `then` y `else` se clasifican como palabras reservadas.
+## 7. Identificadores
+
+Los identificadores son nombres utilizados para representar variables, funciones, tipos y constructores dentro de un programa.
+
+Inicialmente, el analizador reconocerá dos clases de identificadores.
+
+### 7.1 Identificadores de variables y funciones
+
+Comienzan con una letra minúscula o un guion bajo. Después pueden contener letras, números, apóstrofes y guiones bajos.
+
+Ejemplos:
+
+- `edad`
+- `calcularTotal`
+- `numero1`
+- `_resultado`
+- `valorFinal`
+
+Estos lexemas se clasificarán mediante el token:
+
+```text
+IDENTIFICADOR
