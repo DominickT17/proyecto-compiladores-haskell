@@ -124,4 +124,208 @@ Ejemplos:
 Estos lexemas se clasificarán mediante el token:
 
 ```text
+
+Los identificadores de variables y funciones comienzan normalmente con una letra minúscula o con un guion bajo.
+
+Después del primer carácter pueden contener letras, números, guiones bajos y apóstrofes.
+
+Ejemplos válidos:
+
+```haskell
+edad
+calcularTotal
+numero1
+_valor
+nombreCompleto'
+```
+
+Estos lexemas serán clasificados con el token:
+
+```text
 IDENTIFICADOR
+```
+
+Una expresión regular inicial para representar esta categoría será:
+
+```text
+[a-z_][a-zA-Z0-9_']*
+```
+
+Esta expresión indica que el identificador debe comenzar con una letra minúscula o con un guion bajo. Después puede contener letras mayúsculas, letras minúsculas, números, guiones bajos o apóstrofes.
+
+### 7.2 Identificadores de tipos y constructores
+
+En Haskell, los nombres de tipos y constructores comienzan normalmente con una letra mayúscula.
+
+Ejemplos:
+
+```haskell
+Persona
+Estudiante
+Resultado
+UsuarioActivo
+```
+
+Estos lexemas serán clasificados inicialmente con el token:
+
+```text
+IDENTIFICADOR_TIPO
+```
+
+La expresión regular inicial será:
+
+```text
+[A-Z][a-zA-Z0-9_']*
+```
+
+Por ejemplo:
+
+```haskell
+data Persona = Persona String Int
+```
+
+En esta instrucción, el lexema `Persona` comienza con una letra mayúscula y puede representar un tipo o un constructor.
+
+## 8. Literales
+
+Un literal es un valor escrito directamente dentro del código fuente.
+
+El analizador reconocerá inicialmente literales enteros, decimales, caracteres y cadenas.
+
+### 8.1 Literales enteros
+
+Los literales enteros representan números sin parte decimal.
+
+Ejemplos:
+
+```haskell
+0
+18
+250
+2026
+```
+
+Estos lexemas serán clasificados con el token:
+
+```text
+ENTERO
+```
+
+La expresión regular inicial será:
+
+```text
+[0-9]+
+```
+
+El signo negativo se analizará inicialmente como un operador separado del número.
+
+Por ejemplo:
+
+```haskell
+edad = -20
+```
+
+Puede producir los siguientes elementos:
+
+| Lexema | Token |
+|---|---|
+| `edad` | `IDENTIFICADOR` |
+| `=` | `OPERADOR_ASIGNACION` |
+| `-` | `OPERADOR_ARITMETICO` |
+| `20` | `ENTERO` |
+
+### 8.2 Literales decimales
+
+Los literales decimales contienen una parte entera, un punto y una parte decimal.
+
+Ejemplos:
+
+```haskell
+3.14
+18.5
+100.25
+```
+
+Estos lexemas serán clasificados con el token:
+
+```text
+DECIMAL
+```
+
+La expresión regular inicial será:
+
+```text
+[0-9]+\.[0-9]+
+```
+
+Por ejemplo:
+
+```haskell
+precio = 25.50
+```
+
+El lexema `25.50` será reconocido como un literal decimal.
+
+### 8.3 Literales de carácter
+
+Un literal de carácter representa un solo carácter escrito entre comillas simples.
+
+Ejemplos:
+
+```haskell
+'A'
+'b'
+'7'
+```
+
+Estos lexemas serán clasificados con el token:
+
+```text
+CARACTER
+```
+
+Una representación inicial de esta categoría será:
+
+```text
+'[^']'
+```
+
+Por ejemplo:
+
+```haskell
+inicial = 'D'
+```
+
+El lexema `'D'` será reconocido como un literal de carácter.
+
+### 8.4 Literales de cadena
+
+Una cadena es una secuencia de caracteres escrita entre comillas dobles.
+
+Ejemplos:
+
+```haskell
+"Hola"
+"Compiladores"
+"Mayor de edad"
+```
+
+Estos lexemas serán clasificados con el token:
+
+```text
+CADENA
+```
+
+Una representación inicial será:
+
+```text
+\"[^\"]*\"
+```
+
+Por ejemplo:
+
+```haskell
+mensaje = "Hola mundo"
+```
+
+El lexema `"Hola mundo"` será reconocido como una cadena.
