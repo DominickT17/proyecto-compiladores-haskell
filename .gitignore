@@ -1,0 +1,13 @@
+# Archivos generados por Flex
+lexer/lex.yy.c
+
+# Ejecutable del analizador
+lexer/haskell_lexer
+
+# Archivos compilados
+*.o
+*.out
+
+# Resultados generados
+output/*
+!output/.gitkeep
