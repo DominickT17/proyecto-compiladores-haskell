@@ -22,6 +22,10 @@ ENTERO              {DIGITO}+
 CADENA              \"([^\\\n]|\\.)*\"
 COMENTARIO_LINEA    "--"[^\n]*
 
+DECIMAL             {DIGITO}+"."{DIGITO}+
+CARACTER            \'([^\\'\n]|\\.)\'
+BOOLEANO            (True|False)
+
 %%
 
 "module"|"where"|"import"|"qualified"|"as"|"hiding"  {
@@ -58,6 +62,18 @@ COMENTARIO_LINEA    "--"[^\n]*
 
 {IDENTIFICADOR} {
     mostrar_token("IDENTIFICADOR", yytext);
+}
+
+{BOOLEANO} {
+    mostrar_token("BOOLEANO", yytext);
+}
+
+{DECIMAL} {
+    mostrar_token("DECIMAL", yytext);
+}
+
+{CARACTER} {
+    mostrar_token("CARACTER", yytext);
 }
 
 {CONSTRUCTOR} {
