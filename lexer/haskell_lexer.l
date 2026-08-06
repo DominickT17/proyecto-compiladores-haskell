@@ -28,17 +28,35 @@ BOOLEANO            (True|False)
 
 %%
 
-"module"|"where"|"import"|"qualified"|"as"|"hiding"  {
-    mostrar_token("PALABRA_RESERVADA", yytext);
-}
+    /* Palabras reservadas de Haskell. */
+"case"      { mostrar_token("PR_CASE", yytext); }
+"class"     { mostrar_token("PR_CLASS", yytext); }
+"data"      { mostrar_token("PR_DATA", yytext); }
+"default"   { mostrar_token("PR_DEFAULT", yytext); }
+"deriving"  { mostrar_token("PR_DERIVING", yytext); }
+"do"        { mostrar_token("PR_DO", yytext); }
+"else"      { mostrar_token("PR_ELSE", yytext); }
+"foreign"   { mostrar_token("PR_FOREIGN", yytext); }
+"if"        { mostrar_token("PR_IF", yytext); }
+"import"    { mostrar_token("PR_IMPORT", yytext); }
+"in"        { mostrar_token("PR_IN", yytext); }
+"infix"     { mostrar_token("PR_INFIX", yytext); }
+"infixl"    { mostrar_token("PR_INFIXL", yytext); }
+"infixr"    { mostrar_token("PR_INFIXR", yytext); }
+"instance"  { mostrar_token("PR_INSTANCE", yytext); }
+"let"       { mostrar_token("PR_LET", yytext); }
+"module"    { mostrar_token("PR_MODULE", yytext); }
+"newtype"   { mostrar_token("PR_NEWTYPE", yytext); }
+"of"        { mostrar_token("PR_OF", yytext); }
+"then"      { mostrar_token("PR_THEN", yytext); }
+"type"      { mostrar_token("PR_TYPE", yytext); }
+"where"     { mostrar_token("PR_WHERE", yytext); }
+"_"         { mostrar_token("PR_COMODIN", yytext); }
 
-"data"|"type"|"newtype"|"class"|"instance"|"deriving" {
-    mostrar_token("PALABRA_RESERVADA", yytext);
-}
-
-"if"|"then"|"else"|"case"|"of"|"let"|"in"|"do" {
-    mostrar_token("PALABRA_RESERVADA", yytext);
-}
+    /* Palabras especiales usadas en importaciones. */
+"as"        { mostrar_token("KW_AS", yytext); }
+"qualified" { mostrar_token("KW_QUALIFIED", yytext); }
+"hiding"    { mostrar_token("KW_HIDING", yytext); }
 
 {COMENTARIO_LINEA} {
     mostrar_token("COMENTARIO", yytext);
