@@ -9,6 +9,47 @@ static void mostrar_token(const char *tipo, const char *lexema)
 {
     printf("%-22s %-25s %d\n", tipo, lexema, yylineno);
 }
+
+/* Cuenta las líneas y caracteres del archivo. */
+static void contar_lineas_y_caracteres(
+    FILE *archivo,
+    long *lineas,
+    long *caracteres
+)
+{
+    int caracter;
+    int ultimo_caracter = '\0';
+
+    *lineas = 0;
+    *caracteres = 0;
+
+    while ((caracter = fgetc(archivo)) != EOF)
+{
+    unsigned char valor = (unsigned char) caracter;
+
+    /* Cuenta cada carácter UTF-8 una sola vez. */
+    if ((valor & 0xC0) != 0x80)
+    {
+        (*caracteres)++;
+    }
+
+    if (caracter == '\n')
+    {
+        (*lineas)++;
+    }
+
+    ultimo_caracter = caracter;
+}
+
+    /* Cuenta la última línea si no termina con salto de línea. */
+    if (*caracteres > 0 && ultimo_caracter != '\n')
+    {
+        (*lineas)++;
+    }
+
+    rewind(archivo);
+}
+
 %}
 
 /* Definiciones básicas utilizadas por las reglas. */
@@ -142,6 +183,8 @@ BOOLEANO            (True|False)
 int main(int argc, char *argv[])
 {
     FILE *archivo;
+    long total_lineas;
+    long total_caracteres;
 
     if (argc != 2)
     {
@@ -157,12 +200,23 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    contar_lineas_y_caracteres(
+    archivo,
+    &total_lineas,
+    &total_caracteres
+);
+
     yyin = archivo;
 
     printf("%-22s %-25s %s\n", "TOKEN", "LEXEMA", "LINEA");
     printf("----------------------------------------------------------------\n");
 
     yylex();
+
+printf("\nRESUMEN DEL ARCHIVO\n");
+printf("-------------------\n");
+printf("Lineas: %ld\n", total_lineas);
+printf("Caracteres: %ld\n", total_caracteres);
 
     fclose(archivo);
 
