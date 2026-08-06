@@ -89,9 +89,17 @@ BOOLEANO            (True|False)
 ">"  { mostrar_token("OP_MAYOR", yytext); }
 "<"  { mostrar_token("OP_MENOR", yytext); }
 
-"("|")"|"["|"]"|"{"|"}"|","|";" {
-    mostrar_token("SIMBOLO", yytext);
-}
+    /* Símbolos de agrupación. */
+"(" { mostrar_token("PARENTESIS_ABRE", yytext); }
+")" { mostrar_token("PARENTESIS_CIERRA", yytext); }
+"[" { mostrar_token("CORCHETE_ABRE", yytext); }
+"]" { mostrar_token("CORCHETE_CIERRA", yytext); }
+"{" { mostrar_token("LLAVE_ABRE", yytext); }
+"}" { mostrar_token("LLAVE_CIERRA", yytext); }
+
+    /* Separadores. */
+"," { mostrar_token("SEPARADOR_COMA", yytext); }
+";" { mostrar_token("SEPARADOR_PUNTO_COMA", yytext); }
 
 {ENTERO} {
     mostrar_token("ENTERO", yytext);
