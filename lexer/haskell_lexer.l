@@ -66,9 +66,28 @@ BOOLEANO            (True|False)
     mostrar_token("CADENA", yytext);
 }
 
-">="|"<="|"=="|"/="|"->"|"<-"|"::"|"="|"+"|"-"|"*"|"/"|">"|"<" {
-    mostrar_token("OPERADOR", yytext);
-}
+    /* Operadores de varios caracteres. */
+">=" { mostrar_token("OP_MAYOR_IGUAL", yytext); }
+"<=" { mostrar_token("OP_MENOR_IGUAL", yytext); }
+"==" { mostrar_token("OP_IGUALDAD", yytext); }
+"/=" { mostrar_token("OP_DIFERENTE", yytext); }
+"&&" { mostrar_token("OP_AND", yytext); }
+"||" { mostrar_token("OP_OR", yytext); }
+"++" { mostrar_token("OP_CONCATENAR", yytext); }
+"!!" { mostrar_token("OP_INDICE", yytext); }
+"->" { mostrar_token("OP_FLECHA_DERECHA", yytext); }
+"<-" { mostrar_token("OP_FLECHA_IZQUIERDA", yytext); }
+"::" { mostrar_token("OP_ANOTACION_TIPO", yytext); }
+
+    /* Operadores de un carácter. */
+"="  { mostrar_token("OP_ASIGNACION", yytext); }
+"+"  { mostrar_token("OP_SUMA", yytext); }
+"-"  { mostrar_token("OP_RESTA", yytext); }
+"*"  { mostrar_token("OP_MULTIPLICACION", yytext); }
+"/"  { mostrar_token("OP_DIVISION", yytext); }
+"^"  { mostrar_token("OP_POTENCIA", yytext); }
+">"  { mostrar_token("OP_MAYOR", yytext); }
+"<"  { mostrar_token("OP_MENOR", yytext); }
 
 "("|")"|"["|"]"|"{"|"}"|","|";" {
     mostrar_token("SIMBOLO", yytext);
