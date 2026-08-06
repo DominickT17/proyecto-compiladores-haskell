@@ -3,6 +3,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* Contadores de categorías léxicas. */
 static long total_enteros = 0;
@@ -11,10 +12,131 @@ static long total_identificadores = 0;
 static long total_booleanos = 0;
 static long total_operadores = 0;
 
+/* Representa una palabra reservada y su número de apariciones. */
+typedef struct
+{
+    const char *lexema;
+    long cantidad;
+} ConteoPalabra;
+
+static ConteoPalabra palabras_reservadas[] =
+{
+    {"case", 0},
+    {"class", 0},
+    {"data", 0},
+    {"default", 0},
+    {"deriving", 0},
+    {"do", 0},
+    {"else", 0},
+    {"foreign", 0},
+    {"if", 0},
+    {"import", 0},
+    {"in", 0},
+    {"infix", 0},
+    {"infixl", 0},
+    {"infixr", 0},
+    {"instance", 0},
+    {"let", 0},
+    {"module", 0},
+    {"newtype", 0},
+    {"of", 0},
+    {"then", 0},
+    {"type", 0},
+    {"where", 0},
+    {"_", 0},
+    {"as", 0},
+    {"qualified", 0},
+    {"hiding", 0}
+};
+
+static const size_t total_palabras_reservadas =
+    sizeof(palabras_reservadas) / sizeof(palabras_reservadas[0]);
+
 /* Muestra el tipo de token, el lexema y la línea. */
 static void mostrar_token(const char *tipo, const char *lexema)
 {
     printf("%-22s %-25s %d\n", tipo, lexema, yylineno);
+}
+
+/* Incrementa el contador de una palabra reservada. */
+static void registrar_palabra_reservada(
+    const char *tipo,
+    const char *lexema
+)
+{
+    size_t indice;
+
+    for (indice = 0; indice < total_palabras_reservadas; indice++)
+    {
+        if (strcmp(palabras_reservadas[indice].lexema, lexema) == 0)
+        {
+            palabras_reservadas[indice].cantidad++;
+            break;
+        }
+    }
+
+    mostrar_token(tipo, lexema);
+}
+
+/* Ordena por cantidad descendente y después alfabéticamente. */
+static int comparar_frecuencias(
+    const void *primero,
+    const void *segundo
+)
+{
+    const ConteoPalabra *palabra_a =
+        (const ConteoPalabra *) primero;
+
+    const ConteoPalabra *palabra_b =
+        (const ConteoPalabra *) segundo;
+
+    if (palabra_a->cantidad < palabra_b->cantidad)
+    {
+        return 1;
+    }
+
+    if (palabra_a->cantidad > palabra_b->cantidad)
+    {
+        return -1;
+    }
+
+    return strcmp(palabra_a->lexema, palabra_b->lexema);
+}
+
+/* Muestra las palabras encontradas ordenadas por frecuencia. */
+static void mostrar_frecuencia_palabras(void)
+{
+    size_t indice;
+    int hay_resultados = 0;
+
+    qsort(
+        palabras_reservadas,
+        total_palabras_reservadas,
+        sizeof(ConteoPalabra),
+        comparar_frecuencias
+    );
+
+    printf("\nPALABRAS RESERVADAS POR FRECUENCIA\n");
+    printf("---------------------------------\n");
+
+    for (indice = 0; indice < total_palabras_reservadas; indice++)
+    {
+        if (palabras_reservadas[indice].cantidad > 0)
+        {
+            printf(
+                "%-15s %ld\n",
+                palabras_reservadas[indice].lexema,
+                palabras_reservadas[indice].cantidad
+            );
+
+            hay_resultados = 1;
+        }
+    }
+
+    if (!hay_resultados)
+    {
+        printf("No se encontraron palabras reservadas.\n");
+    }
 }
 
 /* Registra e imprime un operador encontrado. */
@@ -84,34 +206,34 @@ BOOLEANO            (True|False)
 %%
 
     /* Palabras reservadas de Haskell. */
-"case"      { mostrar_token("PR_CASE", yytext); }
-"class"     { mostrar_token("PR_CLASS", yytext); }
-"data"      { mostrar_token("PR_DATA", yytext); }
-"default"   { mostrar_token("PR_DEFAULT", yytext); }
-"deriving"  { mostrar_token("PR_DERIVING", yytext); }
-"do"        { mostrar_token("PR_DO", yytext); }
-"else"      { mostrar_token("PR_ELSE", yytext); }
-"foreign"   { mostrar_token("PR_FOREIGN", yytext); }
-"if"        { mostrar_token("PR_IF", yytext); }
-"import"    { mostrar_token("PR_IMPORT", yytext); }
-"in"        { mostrar_token("PR_IN", yytext); }
-"infix"     { mostrar_token("PR_INFIX", yytext); }
-"infixl"    { mostrar_token("PR_INFIXL", yytext); }
-"infixr"    { mostrar_token("PR_INFIXR", yytext); }
-"instance"  { mostrar_token("PR_INSTANCE", yytext); }
-"let"       { mostrar_token("PR_LET", yytext); }
-"module"    { mostrar_token("PR_MODULE", yytext); }
-"newtype"   { mostrar_token("PR_NEWTYPE", yytext); }
-"of"        { mostrar_token("PR_OF", yytext); }
-"then"      { mostrar_token("PR_THEN", yytext); }
-"type"      { mostrar_token("PR_TYPE", yytext); }
-"where"     { mostrar_token("PR_WHERE", yytext); }
-"_"         { mostrar_token("PR_COMODIN", yytext); }
+"case"      { registrar_palabra_reservada("PR_CASE", yytext); }
+"class"     { registrar_palabra_reservada("PR_CLASS", yytext); }
+"data"      { registrar_palabra_reservada("PR_DATA", yytext); }
+"default"   { registrar_palabra_reservada("PR_DEFAULT", yytext); }
+"deriving"  { registrar_palabra_reservada("PR_DERIVING", yytext); }
+"do"        { registrar_palabra_reservada("PR_DO", yytext); }
+"else"      { registrar_palabra_reservada("PR_ELSE", yytext); }
+"foreign"   { registrar_palabra_reservada("PR_FOREIGN", yytext); }
+"if"        { registrar_palabra_reservada("PR_IF", yytext); }
+"import"    { registrar_palabra_reservada("PR_IMPORT", yytext); }
+"in"        { registrar_palabra_reservada("PR_IN", yytext); }
+"infix"     { registrar_palabra_reservada("PR_INFIX", yytext); }
+"infixl"    { registrar_palabra_reservada("PR_INFIXL", yytext); }
+"infixr"    { registrar_palabra_reservada("PR_INFIXR", yytext); }
+"instance"  { registrar_palabra_reservada("PR_INSTANCE", yytext); }
+"let"       { registrar_palabra_reservada("PR_LET", yytext); }
+"module"    { registrar_palabra_reservada("PR_MODULE", yytext); }
+"newtype"   { registrar_palabra_reservada("PR_NEWTYPE", yytext); }
+"of"        { registrar_palabra_reservada("PR_OF", yytext); }
+"then"      { registrar_palabra_reservada("PR_THEN", yytext); }
+"type"      { registrar_palabra_reservada("PR_TYPE", yytext); }
+"where"     { registrar_palabra_reservada("PR_WHERE", yytext); }
+"_"         { registrar_palabra_reservada("PR_COMODIN", yytext); }
 
     /* Palabras especiales usadas en importaciones. */
-"as"        { mostrar_token("KW_AS", yytext); }
-"qualified" { mostrar_token("KW_QUALIFIED", yytext); }
-"hiding"    { mostrar_token("KW_HIDING", yytext); }
+"as"        { registrar_palabra_reservada("KW_AS", yytext); }
+"qualified" { registrar_palabra_reservada("KW_QUALIFIED", yytext); }
+"hiding"    { registrar_palabra_reservada("KW_HIDING", yytext); }
 
 {COMENTARIO_LINEA} {
     mostrar_token("COMENTARIO", yytext);
@@ -241,6 +363,7 @@ printf("Flotantes: %ld\n", total_flotantes);
 printf("Identificadores: %ld\n", total_identificadores);
 printf("Booleanos: %ld\n", total_booleanos);
 printf("Operadores: %ld\n", total_operadores);
+mostrar_frecuencia_palabras();
 
     fclose(archivo);
 
