@@ -12,6 +12,18 @@ static long total_identificadores = 0;
 static long total_booleanos = 0;
 static long total_operadores = 0;
 
+/* Representa un identificador y su número de apariciones. */
+typedef struct
+{
+    char lexema[100];
+    long cantidad;
+} ConteoIdentificador;
+
+#define MAX_IDENTIFICADORES 200
+
+static ConteoIdentificador identificadores_encontrados[MAX_IDENTIFICADORES];
+static size_t cantidad_identificadores_distintos = 0;
+
 /* Representa una palabra reservada y su número de apariciones. */
 typedef struct
 {
@@ -56,6 +68,36 @@ static const size_t total_palabras_reservadas =
 static void mostrar_token(const char *tipo, const char *lexema)
 {
     printf("%-22s %-25s %d\n", tipo, lexema, yylineno);
+}
+
+/* Registra la aparición de un identificador. */
+static void registrar_identificador(const char *lexema)
+{
+    size_t indice;
+
+    for (indice = 0; indice < cantidad_identificadores_distintos; indice++)
+    {
+        if (strcmp(identificadores_encontrados[indice].lexema, lexema) == 0)
+        {
+            identificadores_encontrados[indice].cantidad++;
+            return;
+        }
+    }
+
+    if (cantidad_identificadores_distintos < MAX_IDENTIFICADORES)
+    {
+        strncpy(
+            identificadores_encontrados[cantidad_identificadores_distintos].lexema,
+            lexema,
+            sizeof(identificadores_encontrados[0].lexema) - 1
+        );
+
+        identificadores_encontrados[cantidad_identificadores_distintos]
+            .lexema[sizeof(identificadores_encontrados[0].lexema) - 1] = '\0';
+
+        identificadores_encontrados[cantidad_identificadores_distintos].cantidad = 1;
+        cantidad_identificadores_distintos++;
+    }
 }
 
 /* Incrementa el contador de una palabra reservada. */
@@ -285,7 +327,7 @@ BOOLEANO            (True|False)
 
 {IDENTIFICADOR} {
     total_identificadores++;
-    mostrar_token("IDENTIFICADOR", yytext);
+registrar_identificador(yytext);
 }
 
 {BOOLEANO} {
