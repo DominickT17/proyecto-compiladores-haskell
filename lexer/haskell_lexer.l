@@ -75,6 +75,7 @@ static void registrar_identificador(const char *lexema)
 {
     size_t indice;
 
+    /* Comprueba si el identificador ya fue registrado. */
     for (indice = 0; indice < cantidad_identificadores_distintos; indice++)
     {
         if (strcmp(identificadores_encontrados[indice].lexema, lexema) == 0)
@@ -84,19 +85,76 @@ static void registrar_identificador(const char *lexema)
         }
     }
 
+    /* Si es nuevo, lo agrega a la lista. */
     if (cantidad_identificadores_distintos < MAX_IDENTIFICADORES)
     {
         strncpy(
             identificadores_encontrados[cantidad_identificadores_distintos].lexema,
             lexema,
-            sizeof(identificadores_encontrados[0].lexema) - 1
+            sizeof(identificadores_encontrados[cantidad_identificadores_distintos].lexema) - 1
         );
 
         identificadores_encontrados[cantidad_identificadores_distintos]
-            .lexema[sizeof(identificadores_encontrados[0].lexema) - 1] = '\0';
+            .lexema[
+                sizeof(identificadores_encontrados[cantidad_identificadores_distintos].lexema) - 1
+            ] = '\0';
 
         identificadores_encontrados[cantidad_identificadores_distintos].cantidad = 1;
+
         cantidad_identificadores_distintos++;
+    }
+}
+
+    /* Ordena identificadores por frecuencia y luego alfabéticamente. */
+    static int comparar_identificadores(
+    const void *primero,
+    const void *segundo
+)
+{
+    const ConteoIdentificador *identificador_a =
+        (const ConteoIdentificador *) primero;
+
+    const ConteoIdentificador *identificador_b =
+        (const ConteoIdentificador *) segundo;
+
+    if (identificador_a->cantidad < identificador_b->cantidad)
+    {
+        return 1;
+    }
+
+    if (identificador_a->cantidad > identificador_b->cantidad)
+    {
+        return -1;
+    }
+
+    return strcmp(
+        identificador_a->lexema,
+        identificador_b->lexema
+    );
+}
+
+/* Muestra identificadores ordenados por frecuencia. */
+static void mostrar_frecuencia_identificadores(void)
+{
+    size_t indice;
+
+    qsort(
+        identificadores_encontrados,
+        cantidad_identificadores_distintos,
+        sizeof(ConteoIdentificador),
+        comparar_identificadores
+    );
+
+    printf("\nIDENTIFICADORES POR FRECUENCIA\n");
+    printf("-----------------------------\n");
+
+    for (indice = 0; indice < cantidad_identificadores_distintos; indice++)
+    {
+        printf(
+            "%-20s %ld\n",
+            identificadores_encontrados[indice].lexema,
+            identificadores_encontrados[indice].cantidad
+        );
     }
 }
 
@@ -327,7 +385,8 @@ BOOLEANO            (True|False)
 
 {IDENTIFICADOR} {
     total_identificadores++;
-registrar_identificador(yytext);
+    registrar_identificador(yytext);
+    mostrar_token("IDENTIFICADOR", yytext);
 }
 
 {BOOLEANO} {
@@ -345,7 +404,6 @@ registrar_identificador(yytext);
 }
 
 {CONSTRUCTOR} {
-    total_identificadores++;
     mostrar_token("CONSTRUCTOR", yytext);
 }
 
@@ -406,6 +464,7 @@ printf("Identificadores: %ld\n", total_identificadores);
 printf("Booleanos: %ld\n", total_booleanos);
 printf("Operadores: %ld\n", total_operadores);
 mostrar_frecuencia_palabras();
+mostrar_frecuencia_identificadores();
 
     fclose(archivo);
 
