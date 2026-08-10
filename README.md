@@ -32,6 +32,25 @@ El proyecto utilizará Flex para generar el analizador léxico y posteriormente 
 - Visual Studio Code
 - Haskell como lenguaje analizado
 
+# Interfaz gráfica - Analizador lexico
+
+Este directorio contiene la interfaz gráfica del analizador lexico de Haskell, desarrollada utilizando python y tkinter
+
+## Desarrollador de la interfaz
+
+- Nombre: Yeisson Alexander Poroj Toc
+- Carnet: 202408068
+
+## FUncionamiento 
+
+La interfaz permitirá: 
+
+- Seleccionar archivos de código fuente haskell
+- Visualizar el código fuente
+- Ejecutar el analisis léxico
+- Mostrar los tokens encontrados
+- MOstrar las estadísticas obtenidas durante el análisis
+
 ## Estado actual
 
 - [x] Repositorio creado en GitHub
