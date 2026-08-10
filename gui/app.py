@@ -14,6 +14,8 @@ if RUTA_PROYECTO not in sys.path:
     sys.path.append(RUTA_PROYECTO)
 
 from reports.reporte1 import generar_reporte1
+from reports.reporte2 import generar_reporte2
+
 
 class AnalizadorGUI:
 
@@ -195,6 +197,7 @@ class AnalizadorGUI:
             salida_lexer = self.ejecutar_lexer()
 
             tokens = self.extraer_tokens_lexer(salida_lexer)
+            self.tokens_actuales = tokens
             estadisticas = self.extraer_estadisticas_lexer(salida_lexer)
             palabras_reservadas = self.extraer_palabras_reservadas(salida_lexer)
             self.estadisticas_actuales = estadisticas
@@ -293,12 +296,52 @@ class AnalizadorGUI:
                 f"No se pudo generar el reporte:\n{error}"
             )
 
+    def generar_pdf_reporte2(self):
+        if not self.archivo_actual:
+            messagebox.showwarning(
+                "Reporte 2",
+                "Debe seleccionar y analizar un archivo antes de generar el reporte."
+            )
+            return
+
+        if not self.tokens_actuales:
+            messagebox.showwarning(
+                "Reporte 2",
+                "Debe analizar el archivo antes de generar el reporte."
+            )
+            return
+
+        try:
+            ruta_salida = os.path.join(
+                RUTA_PROYECTO,
+                "output",
+                "reporte2.pdf"
+            )
+
+            generar_reporte2(
+                ruta_salida,
+                self.tokens_actuales,
+                self.archivo_actual
+            )
+
+            messagebox.showinfo(
+                "Reporte 2",
+                f"Reporte generado correctamente en:\n{ruta_salida}"
+            )
+
+        except Exception as error:
+            messagebox.showerror(
+                "Reporte 2"
+                f"NO se pudo generar el reporte:\n{error}"
+            )
+
 
     def __init__(self, root):
 
         self.root = root
         self.archivo_actual = ""
 
+        self.tokens_actuales = []
         self.estadisticas_actuales = {}
         self.palabras_reservadas_actuales = []
         self.ruta_archivo = tk.StringVar()
@@ -390,7 +433,7 @@ class AnalizadorGUI:
             botones,
             text="Reporte 2",
             width=15,
-            state="disabled"
+            command=self.generar_pdf_reporte2
         ).pack(side=tk.LEFT, padx=5)
 
         tk.Button(
