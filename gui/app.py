@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 import json
 import os
 
@@ -14,9 +14,17 @@ class AnalizadorGUI:
                 ("Archivos Haskell","*.hs"),
                 ("Todos los archivos","*.*")
                 ]
-    
+
         )
+        
         if archivo:
+            if not archivo.endswith(".hs"):
+                        messagebox.showwarning(
+                            "Archivo no valido",
+                            "Debe seleccionar un archivo Haskell con extension .hs"
+                        )
+                        return
+            
             self.archivo_actual = archivo
             self.ruta_archivo.set(archivo)
 
