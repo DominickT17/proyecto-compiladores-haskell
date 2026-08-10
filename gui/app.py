@@ -42,6 +42,10 @@ class AnalizadorGUI:
                 self.estado.config(
                     text=f"Estado: Error al abrir el archivo: {error}"
                 )
+        else:
+            self.estado.config(
+                text="Estado: Seleccion de archivo canceladada"
+            )
 
 
     def limpiar_tabla(self):
@@ -50,8 +54,13 @@ class AnalizadorGUI:
 
     def analizar_codigo(self):
         if not self.archivo_actual:
+            messagebox.showwarning(
+                "Archivo requerido",
+                "Debe seleccionar un archivo Haskell antes de analizar."
+            )
+
             self.estado.config(
-                text="Estado: Debe seleccionar un archivo antes de analizar"
+                text="Estado: No hay archivo seleccionado."
             )
             return
 
