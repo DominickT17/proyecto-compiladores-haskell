@@ -324,6 +324,27 @@ class AnalizadorGUI:
             pady=20
         )
 
+        tk.Button(
+            botones,
+            text="Reporte 1",
+            width=15,
+            state="disabled",
+        ).pack(side=tk.LEFT, padx=5)
+
+        tk.Button(
+            botones,
+            text="Reporte 2",
+            width=15,
+            state="disabled"
+        ).pack(side=tk.LEFT, padx=5)
+
+        tk.Button(
+            botones,
+            text="Guardar MonoBD",
+            width=15,
+            state="disabled"
+        ).pack(side=tk.LEFT, padx=5)
+
         # Panel de estadísticas
         tk.Label(
            self.root,
