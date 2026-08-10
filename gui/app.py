@@ -73,9 +73,34 @@ class AnalizadorGUI:
 
             cantidad_lineas = len(contenido.splitlines())
             cantidad_caracteres = len(contenido)
+            cantidad_enteros = 0
+            cantidad_flotantes = 0
+            cantidad_identificadores = 0
+            cantidad_booleanos = 0
+            cantidad_operadores = 0
+
+            for token in tokens: 
+                tipo = token["token"]
+
+                if tipo == "ENTERO":
+                    cantidad_enteros += 1
+
+                elif tipo == "FLOTANTE":
+                    cantidad_flotantes += 1
+                elif tipo in ("ID", "IDENTIFICADOR", "CONSTRUCTOR"):
+                    cantidad_identificadores += 1
+                elif tipo == "BOOLEANO":
+                    cantidad_booleanos += 1
+                elif tipo.startswith("OP_"):
+                    cantidad_operadores += 1
 
             self.estadisticas["lineas"].set(str(cantidad_lineas))
             self.estadisticas["caracteres"].set(str(cantidad_caracteres))
+            self.estadisticas["enteros"].set(str(cantidad_enteros))
+            self.estadisticas["flotantes"].set(str(cantidad_flotantes))
+            self.estadisticas["identificadores"].set(str(cantidad_identificadores))
+            self.estadisticas["booleanos"].set(str(cantidad_booleanos))
+            self.estadisticas["operadores"].set(str(cantidad_operadores))
 
             self.estado.config(
                             text="Estado: Analisis simulado completado"
