@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import filedialog, messagebox
 import json
 import os
+import subprocess
 
 class AnalizadorGUI:
 
@@ -52,6 +53,31 @@ class AnalizadorGUI:
         for elemento in self.tabla_tokens.get_children():
             self.tabla_tokens.delete(elemento)
 
+    def ejecutar_lexer(self):
+        ruta_proyecto = os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))
+        )
+
+        ruta_lexer = os.path.join(
+             ruta_proyecto,
+             "lexer",
+             "haskell_lexer"
+        )
+
+        resultado = subprocess.run(
+            [ruta_lexer, self.archivo_actual],
+            capture_output=True,
+            text=True,
+            encoding="utf-8"
+        )
+
+        if resultado.returncode != 0:
+            raise Exception(
+                resultado.stderr.strip() or "El lexer terminó con un error."
+            )
+
+        return resultado.stdout
+
     def analizar_codigo(self):
         if not self.archivo_actual:
             messagebox.showwarning(
@@ -61,6 +87,16 @@ class AnalizadorGUI:
 
             self.estado.config(
                 text="Estado: No hay archivo seleccionado."
+            )
+            return
+
+        try:
+            salida_lexer = self.ejecutar_lexer()
+            print(salida_lexer)
+
+        except Exception as error:
+            self.estado.config(
+                text=f"Estado: Error al ejecutar lexer: {error}"
             )
             return
 
