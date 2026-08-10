@@ -117,6 +117,36 @@ class AnalizadorGUI:
 
         return tokens
 
+    def extraer_palabras_reservadas(self, salida):
+        palabras = []
+        leyendo_palabras = False
+
+        for linea in salida.splitlines():
+            linea = linea.strip()
+
+            if linea == "PALABRAS RESERVADAS POR FRECUENCIA":
+                leyendo_palabras = True
+                continue
+
+            if leyendo_palabras and linea.startswith("-"):
+                continue
+
+            if linea == "IDENTIFICADORES POR FRECUENCIA":
+                break
+
+            if leyendo_palabras and linea:
+                partes = linea.rsplit(maxsplit=1)
+
+                if len(partes) == 2:
+                    palabra, cantidad = partes
+
+                    palabras.append({
+                        "palabra": palabra.strip(),
+                        "cantidad": cantidad.strip()
+                    })
+
+        return palabras
+
     def extraer_estadisticas_lexer(self, salida):
         estadisticas = {}
 
@@ -156,6 +186,11 @@ class AnalizadorGUI:
 
             tokens = self.extraer_tokens_lexer(salida_lexer)
             estadisticas = self.extraer_estadisticas_lexer(salida_lexer)
+            palabras_reservadas = self.extraer_palabras_reservadas(salida_lexer)
+
+            print("PALABRAS RESERVADAS")
+            for palabra in palabras_reservadas:
+                print(palabra)
 
             self.limpiar_tabla()
 
