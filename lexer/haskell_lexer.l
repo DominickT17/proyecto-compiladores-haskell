@@ -303,6 +303,8 @@ DECIMAL             {DIGITO}+"."{DIGITO}+
 CARACTER            \'([^\\'\n]|\\.)\'
 BOOLEANO            (True|False)
 
+OPERADOR_PERSONALIZADO [-!#$%&*+./<=>?@\\^|~:]+
+
 %%
 
     /* Palabras reservadas de Haskell. */
@@ -365,6 +367,11 @@ BOOLEANO            (True|False)
 "^"  { mostrar_operador("OP_POTENCIA", yytext); }
 ">"  { mostrar_operador("OP_MAYOR", yytext); }
 "<"  { mostrar_operador("OP_MENOR", yytext); }
+
+    /* Operadores definidos por el usuario. */
+{OPERADOR_PERSONALIZADO} {
+    mostrar_operador("OPERADOR_PERSONALIZADO", yytext);
+}
 
     /* Símbolos de agrupación. */
 "(" { mostrar_token("PARENTESIS_ABRE", yytext); }
