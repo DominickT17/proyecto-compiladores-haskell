@@ -4,6 +4,16 @@ from tkinter import filedialog, messagebox
 import json
 import os
 import subprocess
+import sys
+
+RUTA_PROYECTO = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+if RUTA_PROYECTO not in sys.path:
+    sys.path.append(RUTA_PROYECTO)
+
+from reports.reporte1 import generar_reporte1
 
 class AnalizadorGUI:
 
@@ -187,6 +197,8 @@ class AnalizadorGUI:
             tokens = self.extraer_tokens_lexer(salida_lexer)
             estadisticas = self.extraer_estadisticas_lexer(salida_lexer)
             palabras_reservadas = self.extraer_palabras_reservadas(salida_lexer)
+            self.estadisticas_actuales = estadisticas
+            self.palabras_reservadas_actuales = palabras_reservadas
 
             print("PALABRAS RESERVADAS")
             for palabra in palabras_reservadas:
@@ -241,11 +253,54 @@ class AnalizadorGUI:
               text=f"Estado: Error durante el análisis: {error}"
         )
 
+    def generar_pdf_reporte1(self):
+        if not self.archivo_actual:
+           messagebox.showwarning(
+               "Reporte 1",
+               "Debe seleccionar y analizar un archivo antes de generar el reporte."
+           )
+           return
+
+        if not self.estadisticas_actuales:
+           messagebox.showwarning(
+               "Reporte 1",
+               "Debe analizar el archivo antes de generar el reporte."
+           )
+           return
+
+        try:
+            ruta_salida = os.path.join(
+                RUTA_PROYECTO,
+                "output",
+               "reporte1.pdf"
+            )
+
+            generar_reporte1(
+                ruta_salida,
+                self.estadisticas_actuales,
+                self.palabras_reservadas_actuales,
+                self.archivo_actual
+            )
+
+            messagebox.showinfo(
+                "Reporte 1"
+                f"Reporte generado correctamente en:\n{ruta_salida}"
+            )
+
+        except Exception as error:
+            messagebox.showerror(
+                "Reporte 1"
+                f"No se pudo generar el reporte:\n{error}"
+            )
+
+
     def __init__(self, root):
 
         self.root = root
         self.archivo_actual = ""
 
+        self.estadisticas_actuales = {}
+        self.palabras_reservadas_actuales = []
         self.ruta_archivo = tk.StringVar()
         self.ruta_archivo.set("Ningun archivo seleccionado")
         self.root.title("Analizador Lexico de Haskell")
@@ -328,7 +383,7 @@ class AnalizadorGUI:
             botones,
             text="Reporte 1",
             width=15,
-            state="disabled",
+            command=self.generar_pdf_reporte1
         ).pack(side=tk.LEFT, padx=5)
 
         tk.Button(
