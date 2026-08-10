@@ -119,6 +119,56 @@ class AnalizadorGUI:
             pady=20
         )
 
+        tk.Label(
+            self.root,
+            text="Tokens enontrados",
+            font=("Arial", 11, "bold")
+        ).pack(anchor="w", padx=20, pady=(5, 0))
+
+        frame_tabla = tk.Frame(self.root)
+        frame_tabla.pack(
+            fill="both",
+            expand=True,
+            padx=20,
+            pady=10
+        )
+
+        self.tabla_tokens = ttk.Treeview(
+            frame_tabla,
+            columns=("token", "lexema", "linea"),
+            show="headings",
+            height=8
+        )
+
+        self.tabla_tokens.heading("token", text="Token")
+        self.tabla_tokens.heading("lexema", text="Lexema")
+        self.tabla_tokens.heading("linea", text="Linea")
+
+        self.tabla_tokens.column("token", width=200)
+        self.tabla_tokens.column("lexema", width=300)
+        self.tabla_tokens.column("linea", width=100, anchor="center")
+
+        self.tabla_tokens.pack(
+            side=tk.LEFT,
+            fill="both",
+            expand=True
+        )
+
+        scroll_tabla = ttk.Scrollbar(
+            frame_tabla,
+            orient="vertical",
+            command=self.tabla_tokens.yview
+        )
+
+        scroll_tabla.pack(
+            side=tk.RIGHT,
+            fill="y"
+        )
+
+        self.tabla_tokens.configure(
+            yscrollcommand=scroll_tabla.set
+        )
+
         self.estado = tk.Label(
             self.root,
             text="Estado: Esperando archivo...",
