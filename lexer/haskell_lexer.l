@@ -411,6 +411,8 @@ OPERADOR_PERSONALIZADO [-!#$%&*+./<=>?@\\^|~:]+
 }
 
 {CONSTRUCTOR} {
+    total_identificadores++;
+    registrar_identificador(yytext);
     mostrar_token("CONSTRUCTOR", yytext);
 }
 
