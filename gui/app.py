@@ -39,6 +39,10 @@ class AnalizadorGUI:
                 text=f"Estado: Archivo seleccionado"
             )
 
+    def limpiar_tabla(self):
+        for elemento in self.tabla_tokens.get_children():
+            self.tabla_tokens.delete(elemento)
+
     def analizar_codigo(self):
         if not self.archivo_actual:
             self.estado.config(
@@ -54,6 +58,8 @@ class AnalizadorGUI:
         try:
             with open(ruta_json, "r", encoding="utf-8") as archivo_json:
                 tokens = json.load(archivo_json)
+
+            self.limpiar_tabla()
 
             for token in tokens:
                 self.tabla_tokens.insert(
