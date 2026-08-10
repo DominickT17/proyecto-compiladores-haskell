@@ -16,6 +16,8 @@ class AnalizadorGUI:
         )
         if archivo:
             self.archivo_actual = archivo
+            self.ruta_archivo.set(archivo)
+            
             self.estado.config(
                 text=f"Estado: Archivo seleccionado"
             )
@@ -25,6 +27,8 @@ class AnalizadorGUI:
         self.root = root
         self.archivo_actual = ""
 
+        self.ruta_archivo = tk.StringVar()
+        self.ruta_archivo.set("Ningun archivo seleccionado")
         self.root.title("Analizador Lexico de Haskell")
         self.root.geometry("1100x700")
         self.root.minsize(900, 600)
@@ -56,6 +60,25 @@ class AnalizadorGUI:
             text="Analizar código",
             width=18,
         ).pack(side=tk.LEFT)
+
+        frame_ruta = tk.Frame(self.root)
+        frame_ruta.pack(fill="x", padx=20, pady=10)
+
+        tk.Label(
+            frame_ruta,
+            text="Archivo:"
+        ).pack(side=tk.LEFT)
+
+        tk.Entry(
+            frame_ruta,
+            textvariable=self.ruta_archivo,
+            state="readonly"
+        ).pack(
+            side=tk.LEFT,
+            fill="x",
+            expand=True,
+            padx=(10, 0)
+        )
 
         ttk.Separator(
             self.root, 
