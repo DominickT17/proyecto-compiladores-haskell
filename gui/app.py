@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+import json
+import os
 
 class AnalizadorGUI:
 
@@ -37,6 +39,41 @@ class AnalizadorGUI:
                 text=f"Estado: Archivo seleccionado"
             )
 
+    def analizar_codigo(self):
+        if not self.archivo_actual:
+            self.estado.config(
+                text="Estado: Debe seleccionar un archivo antes de analizar"
+            )
+            return
+
+        ruta_json = os.path.join(
+            os.path.dirname(__file__),
+            "mock_tokens.json"
+        )
+
+        try:
+            with open(ruta_json, "r", encoding="utf-8") as archivo_json:
+                tokens = json.load(archivo_json)
+
+            for token in tokens:
+                self.tabla_tokens.insert(
+                    "",
+                    tk.END,
+                    values=(
+                        token["token"],
+                        token["lexema"],
+                        token["linea"]
+                    )
+                )
+
+            self.estado.config(
+                text="Estado: Analisis simulado completado"
+            )
+
+        except Exception as error:
+            self.estado.config(
+                text=f"Estado: Error durante el analisis: {error}"
+            )
     def __init__(self, root):
 
         self.root = root
@@ -74,6 +111,7 @@ class AnalizadorGUI:
             botones,
             text="Analizar código",
             width=18,
+            command=self.analizar_codigo
         ).pack(side=tk.LEFT)
 
         frame_ruta = tk.Frame(self.root)
