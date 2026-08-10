@@ -20,24 +20,21 @@ class AnalizadorGUI:
             self.archivo_actual = archivo
             self.ruta_archivo.set(archivo)
 
-        try: 
-            with open(archivo, "r", encoding="utf-8") as archivo_haskell:
-                contenido = archivo_haskell.read()
+            try: 
+                with open(archivo, "r", encoding="utf-8") as archivo_haskell:
+                    contenido = archivo_haskell.read()
 
-                self.area_codigo.delete("1.0", tk.END)
-                self.area_codigo.insert("1.0", contenido)
+                    self.area_codigo.delete("1.0", tk.END)
+                    self.area_codigo.insert("1.0", contenido)
 
+                    self.estado.config(
+                        text="Estado: Archivo cargado correctamente"
+                    )
+            except Exception as error:
                 self.estado.config(
-                    text="Estado: Archivo cargado correctamente"
+                    text=f"Estado: Error al abrir el archivo: {error}"
                 )
-        except Exception as error:
-            self.estado.config(
-                text=f"Estado: Error al abrir el archivo: {error}"
-            )
 
-            self.estado.config(
-                text=f"Estado: Archivo seleccionado"
-            )
 
     def limpiar_tabla(self):
         for elemento in self.tabla_tokens.get_children():
@@ -71,15 +68,25 @@ class AnalizadorGUI:
                         token["linea"]
                     )
                 )
+            with open(self.archivo_actual, "r", encoding="utf-8") as archivo_fuente:
+                contenido = archivo_fuente.read()
+
+            cantidad_lineas = len(contenido.splitlines())
+            cantidad_caracteres = len(contenido)
+
+            self.estadisticas["lineas"].set(str(cantidad_lineas))
+            self.estadisticas["caracteres"].set(str(cantidad_caracteres))
 
             self.estado.config(
-                text="Estado: Analisis simulado completado"
-            )
+                            text="Estado: Analisis simulado completado"
+                        )
 
         except Exception as error:
             self.estado.config(
-                text=f"Estado: Error durante el analisis: {error}"
+                text=f"Estado: Error al calcular estadisticas: {error}"
             )
+            return
+
     def __init__(self, root):
 
         self.root = root
@@ -218,10 +225,11 @@ class AnalizadorGUI:
                font=("Arial", 11)
            ).pack()
 
-        frame_estadisticas.columnconfigure(
-            tuple(range(len(datos_estadisticas))),
-            weight=1
-        )
+        for columna in range(len(datos_estadisticas)):
+            frame_estadisticas.columnconfigure(
+                columna,
+                weight=1
+            )
         
 
         tk.Label(
