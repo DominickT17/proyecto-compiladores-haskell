@@ -1,0 +1,37 @@
+[
+    {
+        "token": "PR_MODULE",
+        "lexema": "module",
+        "linea": 1
+    },
+
+    {
+        "token":"CONSTRUCTOR",
+        "lexema": "Principal",
+        "linea": 1
+    },
+
+    {
+        "token": "PR_WHERE",
+        "lexema": "where",
+        "linea": 1
+    },
+
+    {
+        "token": "ID",
+        "lexema": "main",
+        "linea": 3
+    },
+
+    {
+        "token": "OP_ASIGNACION",
+        "lexema": "=",
+        "linea": 3
+    },
+
+    {
+        "token": "PR_DO",
+        "lexema": "do",
+        "linea": 3
+    }
+]
