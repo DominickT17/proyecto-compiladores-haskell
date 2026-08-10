@@ -163,6 +163,67 @@ class AnalizadorGUI:
             pady=20
         )
 
+        # Panel de estadísticas
+        tk.Label(
+           self.root,
+           text="Estadísticas:",
+           font=("Arial", 11, "bold")
+           ).pack(anchor="w", padx=20, pady=(5, 0))
+
+        frame_estadisticas = tk.Frame(self.root)
+        frame_estadisticas.pack(
+           fill="x",
+           padx=20,
+           pady=10
+        )
+
+        self.estadisticas = {
+           "lineas": tk.StringVar(value="0"),
+           "caracteres": tk.StringVar(value="0"),
+           "enteros": tk.StringVar(value="0"),
+           "flotantes": tk.StringVar(value="0"),
+           "identificadores": tk.StringVar(value="0"),
+           "booleanos": tk.StringVar(value="0"),
+           "operadores": tk.StringVar(value="0")
+       }
+
+        datos_estadisticas = [
+           ("Líneas", "lineas"),
+           ("Caracteres", "caracteres"),
+           ("Enteros", "enteros"),
+           ("Flotantes", "flotantes"),
+           ("Identificadores", "identificadores"),
+           ("Booleanos", "booleanos"),
+           ("Operadores", "operadores")
+       ]
+
+        for columna, (texto, clave) in enumerate(datos_estadisticas):
+           contenedor = tk.Frame(frame_estadisticas)
+           contenedor.grid(
+              row=0,
+              column=columna,
+              padx=10,
+              pady=5
+            )
+
+           tk.Label(
+               contenedor,
+               text=texto,
+               font=("Arial", 9, "bold")
+           ).pack()
+
+           tk.Label(
+               contenedor,
+               textvariable=self.estadisticas[clave],
+               font=("Arial", 11)
+           ).pack()
+
+        frame_estadisticas.columnconfigure(
+            tuple(range(len(datos_estadisticas))),
+            weight=1
+        )
+        
+
         tk.Label(
             self.root,
             text="Tokens enontrados",
