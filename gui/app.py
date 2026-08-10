@@ -15,6 +15,7 @@ if RUTA_PROYECTO not in sys.path:
 
 from reports.reporte1 import generar_reporte1
 from reports.reporte2 import generar_reporte2
+from database.mongodb import guardar_tabla_simbolos
 
 
 class AnalizadorGUI:
@@ -335,6 +336,38 @@ class AnalizadorGUI:
                 f"NO se pudo generar el reporte:\n{error}"
             )
 
+    def guardar_en_mongodb(self):
+        if not self.archivo_actual:
+            messagebox.showwarning(
+                "MongoDB",
+                "Debe seleccionar y analizar un archivo antes de guardar."
+            )
+            return
+
+        if not self.tokens_actuales:
+            messagebox.showwarning(
+                "MongoDB",
+                "Debe analizar el archivo antes de guardar la tabla de símbolos."
+            )
+            return
+
+        try:
+            cantidad = guardar_tabla_simbolos(
+                self.tokens_actuales,
+                self.archivo_actual
+            )
+
+            messagebox.showinfo(
+                "MongoDB",
+                f"Tabla de símbolos guardada correctamente.\n"
+                f"Registros almacenados: {cantidad}"
+            )
+
+        except Exception as error: 
+            messagebox.showerror(
+                "MongoDB",
+                f"No se pudo guardar la tabla de simbolos:\n{error}"
+            )
 
     def __init__(self, root):
 
@@ -440,7 +473,7 @@ class AnalizadorGUI:
             botones,
             text="Guardar MonoBD",
             width=15,
-            state="disabled"
+            command=self.guardar_en_mongodb
         ).pack(side=tk.LEFT, padx=5)
 
         # Panel de estadísticas

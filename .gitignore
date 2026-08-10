@@ -10,4 +10,7 @@ lexer/haskell_lexer
 
 # Resultados generados
 output/*
-!output/.gitkeep
+!output/.gitkeep.venv/
+.env
+__pycache__/
+*.pyc
