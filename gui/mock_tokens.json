@@ -1,0 +1,72 @@
+[
+    {
+        "token": "PR_MODULE",
+        "lexema": "module",
+        "linea": 1
+    },
+    {
+        "token": "CONSTRUCTOR",
+        "lexema": "Principal",
+        "linea": 1
+    },
+    {
+        "token": "PR_WHERE",
+        "lexema": "where",
+        "linea": 1
+    },
+    {
+        "token": "ID",
+        "lexema": "main",
+        "linea": 3
+    },
+    {
+        "token": "OP_ASIGNACION",
+        "lexema": "=",
+        "linea": 3
+    },
+    {
+        "token": "PR_DO",
+        "lexema": "do",
+        "linea": 3
+    },
+    {
+        "token": "ID",
+        "lexema": "edad",
+        "linea": 5
+    },
+    {
+        "token": "ENTERO",
+        "lexema": "25",
+        "linea": 5
+    },
+    {
+        "token": "ID",
+        "lexema": "altura",
+        "linea": 6
+    },
+    {
+        "token": "FLOTANTE",
+        "lexema": "1.75",
+        "linea": 6
+    },
+    {
+        "token": "ID",
+        "lexema": "activo",
+        "linea": 7
+    },
+    {
+        "token": "BOOLEANO",
+        "lexema": "True",
+        "linea": 7
+    },
+    {
+        "token": "OP_SUMA",
+        "lexema": "+",
+        "linea": 9
+    },
+    {
+        "token": "OP_COMPARACION",
+        "lexema": "==",
+        "linea": 10
+    }
+]
