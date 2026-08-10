@@ -4,6 +4,19 @@ from tkinter import filedialog, messagebox
 import json
 import os
 import subprocess
+import sys
+
+RUTA_PROYECTO = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+if RUTA_PROYECTO not in sys.path:
+    sys.path.append(RUTA_PROYECTO)
+
+from reports.reporte1 import generar_reporte1
+from reports.reporte2 import generar_reporte2
+from database.mongodb import guardar_tabla_simbolos
+
 
 class AnalizadorGUI:
 
@@ -185,8 +198,11 @@ class AnalizadorGUI:
             salida_lexer = self.ejecutar_lexer()
 
             tokens = self.extraer_tokens_lexer(salida_lexer)
+            self.tokens_actuales = tokens
             estadisticas = self.extraer_estadisticas_lexer(salida_lexer)
             palabras_reservadas = self.extraer_palabras_reservadas(salida_lexer)
+            self.estadisticas_actuales = estadisticas
+            self.palabras_reservadas_actuales = palabras_reservadas
 
             print("PALABRAS RESERVADAS")
             for palabra in palabras_reservadas:
@@ -241,11 +257,126 @@ class AnalizadorGUI:
               text=f"Estado: Error durante el análisis: {error}"
         )
 
+    def generar_pdf_reporte1(self):
+        if not self.archivo_actual:
+           messagebox.showwarning(
+               "Reporte 1",
+               "Debe seleccionar y analizar un archivo antes de generar el reporte."
+           )
+           return
+
+        if not self.estadisticas_actuales:
+           messagebox.showwarning(
+               "Reporte 1",
+               "Debe analizar el archivo antes de generar el reporte."
+           )
+           return
+
+        try:
+            ruta_salida = os.path.join(
+                RUTA_PROYECTO,
+                "output",
+               "reporte1.pdf"
+            )
+
+            generar_reporte1(
+                ruta_salida,
+                self.estadisticas_actuales,
+                self.palabras_reservadas_actuales,
+                self.archivo_actual
+            )
+
+            messagebox.showinfo(
+                "Reporte 1"
+                f"Reporte generado correctamente en:\n{ruta_salida}"
+            )
+
+        except Exception as error:
+            messagebox.showerror(
+                "Reporte 1"
+                f"No se pudo generar el reporte:\n{error}"
+            )
+
+    def generar_pdf_reporte2(self):
+        if not self.archivo_actual:
+            messagebox.showwarning(
+                "Reporte 2",
+                "Debe seleccionar y analizar un archivo antes de generar el reporte."
+            )
+            return
+
+        if not self.tokens_actuales:
+            messagebox.showwarning(
+                "Reporte 2",
+                "Debe analizar el archivo antes de generar el reporte."
+            )
+            return
+
+        try:
+            ruta_salida = os.path.join(
+                RUTA_PROYECTO,
+                "output",
+                "reporte2.pdf"
+            )
+
+            generar_reporte2(
+                ruta_salida,
+                self.tokens_actuales,
+                self.archivo_actual
+            )
+
+            messagebox.showinfo(
+                "Reporte 2",
+                f"Reporte generado correctamente en:\n{ruta_salida}"
+            )
+
+        except Exception as error:
+            messagebox.showerror(
+                "Reporte 2"
+                f"NO se pudo generar el reporte:\n{error}"
+            )
+
+    def guardar_en_mongodb(self):
+        if not self.archivo_actual:
+            messagebox.showwarning(
+                "MongoDB",
+                "Debe seleccionar y analizar un archivo antes de guardar."
+            )
+            return
+
+        if not self.tokens_actuales:
+            messagebox.showwarning(
+                "MongoDB",
+                "Debe analizar el archivo antes de guardar la tabla de símbolos."
+            )
+            return
+
+        try:
+            cantidad = guardar_tabla_simbolos(
+                self.tokens_actuales,
+                self.archivo_actual
+            )
+
+            messagebox.showinfo(
+                "MongoDB",
+                f"Tabla de símbolos guardada correctamente.\n"
+                f"Registros almacenados: {cantidad}"
+            )
+
+        except Exception as error: 
+            messagebox.showerror(
+                "MongoDB",
+                f"No se pudo guardar la tabla de simbolos:\n{error}"
+            )
+
     def __init__(self, root):
 
         self.root = root
         self.archivo_actual = ""
 
+        self.tokens_actuales = []
+        self.estadisticas_actuales = {}
+        self.palabras_reservadas_actuales = []
         self.ruta_archivo = tk.StringVar()
         self.ruta_archivo.set("Ningun archivo seleccionado")
         self.root.title("Analizador Lexico de Haskell")
@@ -328,21 +459,21 @@ class AnalizadorGUI:
             botones,
             text="Reporte 1",
             width=15,
-            state="disabled",
+            command=self.generar_pdf_reporte1
         ).pack(side=tk.LEFT, padx=5)
 
         tk.Button(
             botones,
             text="Reporte 2",
             width=15,
-            state="disabled"
+            command=self.generar_pdf_reporte2
         ).pack(side=tk.LEFT, padx=5)
 
         tk.Button(
             botones,
             text="Guardar MonoBD",
             width=15,
-            state="disabled"
+            command=self.guardar_en_mongodb
         ).pack(side=tk.LEFT, padx=5)
 
         # Panel de estadísticas
