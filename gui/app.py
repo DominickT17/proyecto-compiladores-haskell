@@ -17,7 +17,22 @@ class AnalizadorGUI:
         if archivo:
             self.archivo_actual = archivo
             self.ruta_archivo.set(archivo)
-            
+
+        try: 
+            with open(archivo, "r", encoding="utf-8") as archivo_haskell:
+                contenido = archivo_haskell.read()
+
+                self.area_codigo.delete("1.0", tk.END)
+                self.area_codigo.insert("1.0", contenido)
+
+                self.estado.config(
+                    text="Estado: Archivo cargado correctamente"
+                )
+        except Exception as error:
+            self.estado.config(
+                text=f"Estado: Error al abrir el archivo: {error}"
+            )
+
             self.estado.config(
                 text=f"Estado: Archivo seleccionado"
             )
@@ -84,6 +99,25 @@ class AnalizadorGUI:
             self.root, 
             orient="horizontal"
             ).pack(fill="x", pady=15)
+
+        tk.Label(
+            self.root,
+            text="codigo fuente",
+            font=("Arial", 11, "bold")
+        ).pack(anchor="w", padx=20, pady=(5, 0))
+
+        self.area_codigo = tk.Text(
+            self.root,
+            wrap="none",
+            height=20
+        )
+
+        self.area_codigo.pack(
+            fill="both",
+            expand=True,
+            padx=20,
+            pady=20
+        )
 
         self.estado = tk.Label(
             self.root,
