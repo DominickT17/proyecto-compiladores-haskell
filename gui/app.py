@@ -78,92 +78,133 @@ class AnalizadorGUI:
 
         return resultado.stdout
 
+    def extraer_tokens_lexer(self, salida):
+        tokens = []
+
+        leyendo_tokens = False
+
+        for linea in salida.splitlines():
+
+            if linea.startswith("TOKEN"):
+               leyendo_tokens = True
+               continue
+
+            if leyendo_tokens and linea.startswith("-"):
+               continue
+
+            if linea.startswith("RESUMEN DEL ARCHIVO"):
+               break
+
+            if leyendo_tokens and linea.strip():
+               partes = linea.rsplit(maxsplit=1)
+
+               if len(partes) != 2:
+                  continue
+
+               contenido, numero_linea = partes
+               partes_token = contenido.split(maxsplit=1)
+
+            if len(partes_token) != 2:
+                continue
+
+            token, lexema = partes_token
+
+            tokens.append({
+                "token": token,
+                "lexema": lexema.strip(),
+                "linea": numero_linea
+            })
+
+        return tokens
+
+    def extraer_estadisticas_lexer(self, salida):
+        estadisticas = {}
+
+        leyendo_resumen = False
+
+        for linea in salida.splitlines():
+            linea = linea.strip()
+
+            if linea == "RESUMEN DEL ARCHIVO":
+                leyendo_resumen = True
+                continue
+
+            if leyendo_resumen and linea.startswith("PALABRAS RESERVADAS"):
+                break
+
+            if leyendo_resumen and ":" in linea:
+                clave, valor = linea.split(":", 1)
+
+                estadisticas[clave.strip().lower()] = valor.strip()
+
+        return estadisticas
+
     def analizar_codigo(self):
         if not self.archivo_actual:
-            messagebox.showwarning(
-                "Archivo requerido",
-                "Debe seleccionar un archivo Haskell antes de analizar."
-            )
+           messagebox.showwarning(
+               "Archivo requerido",
+               "Debe seleccionar un archivo Haskell antes de analizar."
+           )
 
-            self.estado.config(
-                text="Estado: No hay archivo seleccionado."
-            )
-            return
+           self.estado.config(
+               text="Estado: No hay archivo seleccionado."
+           ) 
+           return
 
         try:
             salida_lexer = self.ejecutar_lexer()
-            print(salida_lexer)
 
-        except Exception as error:
-            self.estado.config(
-                text=f"Estado: Error al ejecutar lexer: {error}"
-            )
-            return
-
-        ruta_json = os.path.join(
-            os.path.dirname(__file__),
-            "mock_tokens.json"
-        )
-
-        try:
-            with open(ruta_json, "r", encoding="utf-8") as archivo_json:
-                tokens = json.load(archivo_json)
+            tokens = self.extraer_tokens_lexer(salida_lexer)
+            estadisticas = self.extraer_estadisticas_lexer(salida_lexer)
 
             self.limpiar_tabla()
 
             for token in tokens:
                 self.tabla_tokens.insert(
-                    "",
-                    tk.END,
-                    values=(
-                        token["token"],
-                        token["lexema"],
-                        token["linea"]
-                    )
-                )
-            with open(self.archivo_actual, "r", encoding="utf-8") as archivo_fuente:
-                contenido = archivo_fuente.read()
+                   "",
+                   tk.END,
+                   values=(
+                       token["token"],
+                       token["lexema"],
+                       token["linea"]
+                   )
+                ) 
+            self.estadisticas["lineas"].set(
+                estadisticas.get("lineas", "0")
+            )
 
-            cantidad_lineas = len(contenido.splitlines())
-            cantidad_caracteres = len(contenido)
-            cantidad_enteros = 0
-            cantidad_flotantes = 0
-            cantidad_identificadores = 0
-            cantidad_booleanos = 0
-            cantidad_operadores = 0
+            self.estadisticas["caracteres"].set(
+                estadisticas.get("caracteres", "0")
+            )
 
-            for token in tokens: 
-                tipo = token["token"]
+            self.estadisticas["enteros"].set(
+                estadisticas.get("enteros", "0")
+            )
 
-                if tipo == "ENTERO":
-                    cantidad_enteros += 1
+            self.estadisticas["flotantes"].set(
+                estadisticas.get("flotantes", "0")
+            )
 
-                elif tipo == "FLOTANTE":
-                    cantidad_flotantes += 1
-                elif tipo in ("ID", "IDENTIFICADOR", "CONSTRUCTOR"):
-                    cantidad_identificadores += 1
-                elif tipo == "BOOLEANO":
-                    cantidad_booleanos += 1
-                elif tipo.startswith("OP_"):
-                    cantidad_operadores += 1
+            self.estadisticas["identificadores"].set(
+                estadisticas.get("identificadores", "0")
+            )
 
-            self.estadisticas["lineas"].set(str(cantidad_lineas))
-            self.estadisticas["caracteres"].set(str(cantidad_caracteres))
-            self.estadisticas["enteros"].set(str(cantidad_enteros))
-            self.estadisticas["flotantes"].set(str(cantidad_flotantes))
-            self.estadisticas["identificadores"].set(str(cantidad_identificadores))
-            self.estadisticas["booleanos"].set(str(cantidad_booleanos))
-            self.estadisticas["operadores"].set(str(cantidad_operadores))
+            self.estadisticas["booleanos"].set(
+                estadisticas.get("booleanos", "0")
+            ) 
+
+            self.estadisticas["operadores"].set(
+                estadisticas.get("operadores", "0")
+            )
 
             self.estado.config(
-                            text="Estado: Analisis simulado completado"
-                        )
+                text="Estado: Análisis léxico completado."
+            )
 
         except Exception as error:
             self.estado.config(
-                text=f"Estado: Error al calcular estadisticas: {error}"
-            )
-            return
+              text=f"Estado: Error durante el análisis: {error}"
+        )
 
     def __init__(self, root):
 
