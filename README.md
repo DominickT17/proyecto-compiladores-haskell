@@ -11,10 +11,13 @@ Proyecto corto del curso de Compiladores orientado al análisis léxico de archi
 - Docente: Ing. Erick Juan José de Paz Rivera
 - Lenguaje asignado: Haskell
 
-## Responsable inicial del repositorio
+## Responsables del repositorio
 
 - Dóminick Ricardo Cifuentes Tomás
 - Carnet: 202408077
+- Yeisson Alexander Poroj Toc
+- Carnet: 2002408068
+
 
 ## Objetivo general
 
