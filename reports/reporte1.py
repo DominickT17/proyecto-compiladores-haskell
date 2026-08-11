@@ -42,7 +42,7 @@ def generar_reporte1(
 
     datos_estadisticas = [
         ["Estadisticas", "Cantidad"],
-        ["Lienas", estadisticas.get("lineas", "0")],
+        ["Lineas", estadisticas.get("lineas", "0")],
         ["Caracteres", estadisticas.get("caracteres", "0")],
         ["Enteros", estadisticas.get("enteros", "0")],
         ["Flotantes", estadisticas.get("flotantes", "0")],
@@ -106,9 +106,9 @@ def generar_reporte1(
 
     tabla_palabras.setStyle(
         TableStyle([
-            ("BACKGOUND", (0, 0), (-1, 0), colors.lightgrey),
+            ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
             ("GRID", (0, 0), (-1, -1), 1, colors.black),
-            ("ALGIN", (1, 1), (1, -1), "CENTER"),
+            ("ALIGN", (1, 1), (1, -1), "CENTER"),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
             ("TOPPADDING", (0, 0), (-1, -1), 7)
         ])
