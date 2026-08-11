@@ -17,6 +17,8 @@ Proyecto corto del curso de Compiladores orientado al análisis léxico de archi
 - Carnet: 202408077
 - Yeisson Alexander Poroj Toc
 - Carnet: 2002408068
+- Sandra Paola Gomez Diaz
+- 202408023
 
 
 ## Objetivo general
@@ -64,3 +66,54 @@ La interfaz permitirá:
 - [ ] Desarrollo de la interfaz gráfica
 - [ ] Generación de reportes PDF
 - [ ] Integración con MongoDB
+
+      
+## Desarrolladora del programa de prueba
+
+Nombre: Sandra Paola Gomez Diaz
+Carnet:202408023
+
+## Contenido del programa
+
+El archivo utilizado para las pruebas se encuentra en:
+
+`samples/programa_completo.hs`
+
+El programa incluye:
+
+- Palabras reservadas de Haskell
+- Identificadores repetidos
+- Números enteros
+- Números flotantes
+- Valores booleanos `True` y `False`
+- Cadenas de texto
+- Caracteres
+- Comentarios
+- Listas
+- Funciones
+- Condicionales
+- Pattern matching
+- Recursividad
+- Operadores aritméticos
+- Operadores lógicos
+- Operadores de comparación
+
+El programa representa un sistema sencillo de estudiantes y calificaciones, utilizado únicamente como código fuente de prueba para el analizador léxico.
+
+## Pruebas integrales
+
+También se agregó documentación para comprobar el funcionamiento del lexer utilizando el programa Haskell completo.
+
+Archivos relacionados:
+
+- `samples/programa_completo.hs`
+- `tests/validacion_programa_completo.md`
+- `docs/guia_programa_prueba.md`
+
+La prueba permite verificar que el analizador reconozca correctamente los diferentes lexemas presentes en el código fuente y genere los tokens y estadísticas correspondientes
+- [x] Programa Haskell de prueba con más de 75 líneas
+- [x] Inclusión de enteros, flotantes, booleanos y cadenas
+- [x] Inclusión de identificadores y palabras reservadas
+- [x] Inclusión de más de 10 operadores
+- [x] Documentación de la prueba integral del lexer
+- [x] Archivo de validación del programa Haskell
