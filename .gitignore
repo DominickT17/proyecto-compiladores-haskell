@@ -1,7 +1,19 @@
+# Entorno virtual de Python
+.venv/
+venv/
+
+# Variables de entorno y credenciales
+.env
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+
 # Archivos generados por Flex
 lexer/lex.yy.c
 
-# Ejecutable del analizador
+# Ejecutable generado del analizador
 lexer/haskell_lexer
 
 # Archivos compilados
@@ -10,7 +22,4 @@ lexer/haskell_lexer
 
 # Resultados generados
 output/*
-!output/.gitkeep.venv/
-.env
-__pycache__/
-*.pyc
+!output/.gitkeep

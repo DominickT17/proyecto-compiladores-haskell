@@ -16,7 +16,7 @@ if RUTA_PROYECTO not in sys.path:
 from reports.reporte1 import generar_reporte1
 from reports.reporte2 import generar_reporte2
 from database.mongodb import guardar_tabla_simbolos
-
+from datetime import datetime
 
 class AnalizadorGUI:
 
@@ -272,13 +272,22 @@ class AnalizadorGUI:
            )
            return
 
-        try:
-            ruta_salida = os.path.join(
-                RUTA_PROYECTO,
-                "output",
-               "reporte1.pdf"
-            )
+        ruta_salida = filedialog.asksaveasfilename(
+            title="Guardar Reporte 1",
+            defaultextension=".pdf",
+            filetypes=[
+                ("Archivo PDF", "*.pdf")
+            ],
+            initialfile="reporte1.pdf"
+        )
 
+        if not ruta_salida:
+            self.estado.config(
+                text="Estado: Generación del Reporte 1 cancelada."
+            )
+            return
+
+        try:
             generar_reporte1(
                 ruta_salida,
                 self.estadisticas_actuales,
@@ -286,9 +295,15 @@ class AnalizadorGUI:
                 self.archivo_actual
             )
 
+            self.estado.config(
+                text="Estado: Reporte 1 generado correctamente."
+            )
+
             messagebox.showinfo(
                 "Reporte 1",
-                f"Reporte generado correctamente en:\n{ruta_salida}"
+                f"Reporte generado correctamente.\n\n"
+                f"Ubicación:\n{ruta_salida}"
+                
             )
 
         except Exception as error:
@@ -312,22 +327,37 @@ class AnalizadorGUI:
             )
             return
 
-        try:
-            ruta_salida = os.path.join(
-                RUTA_PROYECTO,
-                "output",
-                "reporte2.pdf"
-            )
+        ruta_salida = filedialog.asksaveasfilename(
+            title="Guardar Reporte 2",
+            defaultextension=".pdf",
+            filetypes=[
+                ("Archivo PDF", "*.pdf")
+            ],
+            initialfile="reporte2.pdf"
+        )
 
+        if not ruta_salida:
+            self.estado.config(
+                text="Estado: Generación del Reporte 2 cancelada."
+            )
+            return
+
+
+        try:
             generar_reporte2(
                 ruta_salida,
                 self.tokens_actuales,
                 self.archivo_actual
             )
 
+            self.estado.config(
+                text="Estado: Reporte 2 generado correctamente."
+            )
+
             messagebox.showinfo(
                 "Reporte 2",
-                f"Reporte generado correctamente en:\n{ruta_salida}"
+                f"Reporte generado correctamente.\n\n"
+                f"Ubicación:\n{ruta_salida}"
             )
 
         except Exception as error:
@@ -335,6 +365,12 @@ class AnalizadorGUI:
                 "Reporte 2",
                 f"NO se pudo generar el reporte:\n{error}"
             )
+
+            messagebox.showerror(
+                "Reporte 2",
+                f"No se pudo generar el reporte.\n\n"
+                f"Detalle del error:\n{error}"
+        )
 
     def guardar_en_mongodb(self):
         if not self.archivo_actual:

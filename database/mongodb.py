@@ -35,12 +35,21 @@ def guardar_tabla_simbolos(tokens, archivo_fuente):
 
     try:
         simbolos = []
+        simbolos_vistos = set()
 
         for token in tokens:
             if token["token"] in (
                 "IDENTIFICADOR",
                 "CONSTRUCTOR"
             ):
+                clave = (
+                    token["lexema"],
+                    token["token"]
+                )
+
+                if clave not in simbolos_vistos:
+                    simbolos_vistos.add(clave)
+                
                 simbolos.append({
                     "lexema": token["lexema"],
                     "token": token["token"],
@@ -50,6 +59,10 @@ def guardar_tabla_simbolos(tokens, archivo_fuente):
 
         if not simbolos:
             return 0
+
+        coleccion.delete_many({
+            "archivo": archivo_fuente
+        })
 
         resultado = coleccion.insert_many(simbolos)
 
