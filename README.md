@@ -6,6 +6,15 @@ El proyecto consiste en un analizador léxico para el lenguaje Haskell desarroll
 
 La aplicación permite analizar archivos fuente `.hs`, identificar los diferentes componentes léxicos, visualizar los resultados, generar reportes en PDF y almacenar la tabla de símbolos en MongoDB Atlas.
 
+## Responsables del repositorio
+
+- **Dóminick Ricardo Cifuentes Tomás**
+  - Carnet: 202408077
+- **Yeisson Alexander Poroj Toc**
+  - Carnet: 2002408068
+- **Sandra Paola Gomez Diaz**
+  - Carnet: 202408023
+
 ---
 
 ## Funcionalidades
@@ -97,246 +106,88 @@ Para ejecutar el proyecto se necesita:
 
 En Ubuntu se pueden instalar las herramientas principales con:
 
-```bash
-sudo apt update
-sudo apt install flex gcc make python3 python3-venv python3-tk
-```
-
----
-
-## Instalación
-
-### 1. Clonar el repositorio
-
-```bash
-git clone URL_DEL_REPOSITORIO
-cd proyecto-compiladores-haskell
-```
-
-### 2. Crear el entorno virtual
-
-```bash
-python3 -m venv .venv
-```
-
-Activarlo:
-
-```bash
-source .venv/bin/activate
-```
-
-### 3. Instalar las dependencias
-
-```bash
-pip install -r requirements.txt
-```
-
-Las principales dependencias de Python son:
-
-- ReportLab
-- PyMongo
-- python-dotenv
-
----
-
-## Compilar el analizador léxico
-
-El proyecto incluye un `Makefile` para facilitar la compilación.
-
-Ejecutar:
-
-```bash
-make lexer
-```
-
-Este comando utiliza Flex y GCC para generar el ejecutable del analizador a partir de:
-
-```text
-lexer/haskell_lexer.l
-```
-
-También puede utilizarse:
-
-```bash
-make clean
-```
-
-para eliminar los archivos generados durante la compilación.
-
----
-
-## Configuración de MongoDB Atlas
-
-Por seguridad, las credenciales de MongoDB no están almacenadas en el repositorio.
-
-El proyecto incluye:
-
-```text
-.env.example
-```
-
-Crear un archivo llamado:
-
-```text
-.env
-```
-
-en la raíz del proyecto.
-
-Agregar la cadena de conexión:
-
-```text
-MONGODB_URI=mongodb+srv://USUARIO:CONTRASENA@CLUSTER.mongodb.net/?appName=AnalizadorHaskell
-```
-
-Reemplazar los valores por las credenciales correspondientes de MongoDB Atlas.
-
-> El archivo `.env` está incluido en `.gitignore` y no debe subirse al repositorio.
-
----
-
-## Ejecutar la aplicación
-
-Después de activar el entorno virtual y compilar el lexer:
-
-```bash
-make run
-```
-
-También puede ejecutarse directamente:
-
-```bash
-python gui/app.py
-```
-
----
-
-## Flujo de uso
-
-1. Ejecutar la aplicación.
-2. Presionar **Abrir archivo**.
-3. Seleccionar un archivo Haskell `.hs`.
-4. Presionar **Analizar código**.
-5. Revisar los tokens y estadísticas obtenidas.
-6. Generar el **Reporte 1** o **Reporte 2**.
-7. Seleccionar el nombre y ubicación del archivo PDF.
-8. Utilizar **Guardar MongoDB** para almacenar la tabla de símbolos.
-
----
-
-## Reportes
-
-### Reporte 1 - Estadísticas del análisis
-
-Contiene información general del archivo analizado:
-
-- Cantidad de líneas.
-- Cantidad de caracteres.
-- Enteros.
-- Flotantes.
-- Identificadores.
-- Booleanos.
-- Operadores.
-- Palabras reservadas ordenadas por frecuencia.
-- Archivo analizado.
-- Fecha y hora de generación.
-
-### Reporte 2 - Tokens y tabla de símbolos
-
-Contiene:
-
-- Token.
-- Lexema.
-- Número de línea.
-- Tabla de símbolos.
-- Identificadores.
-- Constructores.
-- Primera línea de aparición de cada símbolo.
-- Archivo analizado.
-- Fecha y hora de generación.
-
-Los reportes son generados en formato PDF utilizando ReportLab.
-
----
-
-## MongoDB Atlas
-
-La aplicación utiliza MongoDB Atlas para almacenar la tabla de símbolos obtenida durante el análisis.
-
-Cada símbolo almacena información como:
-
-```text
-lexema
-token
-linea
-archivo
-```
-
-El sistema evita almacenar repetidamente los mismos símbolos de un análisis y permite mantener la información asociada al archivo fuente.
-
----
-
-## Analizador léxico
-
-El analizador fue desarrollado utilizando Flex y reconoce diferentes categorías léxicas de Haskell, incluyendo:
-
-- Palabras reservadas.
-- Identificadores.
-- Constructores.
-- Enteros.
-- Decimales.
-- Booleanos.
-- Cadenas.
-- Caracteres.
-- Operadores.
-- Símbolos de agrupación.
-- Separadores.
-- Comentarios.
-
-Además, genera estadísticas que posteriormente son utilizadas por la interfaz gráfica y los reportes.
-
----
-
-## Manejo de seguridad
-
-El proyecto utiliza variables de entorno para proteger la cadena de conexión de MongoDB Atlas.
-
-Los siguientes archivos y directorios no deben almacenarse en el repositorio:
-
-```text
-.env
-.venv/
-__pycache__/
-*.pyc
-lexer/lex.yy.c
-lexer/haskell_lexer
-```
-
-Estos elementos están controlados mediante `.gitignore`.
-
----
-
-## Autores
-
-Proyecto desarrollado de forma colaborativa por los integrantes del equipo para el curso de Compiladores.
-
----
-
 ## Estado del proyecto
 
 **Proyecto finalizado.**
 
 Funcionalidades implementadas:
 
-- Analizador léxico con Flex.
-- Integración del lexer con Python.
-- Interfaz gráfica.
-- Visualización de código fuente.
-- Visualización de tokens.
-- Estadísticas.
-- Reporte 1.
-- Reporte 2.
-- Tabla de símbolos.
-- Persistencia en MongoDB Atlas.
-- Configuración mediante variables de entorno.
-- Compilación mediante Makefile.
+- [x] Repositorio creado en GitHub.
+- [x] Repositorio clonado mediante SSH.
+- [x] Entorno de trabajo preparado en Ubuntu.
+- [x] Definición de lexemas y tokens.
+- [x] Analizador léxico desarrollado con Flex.
+- [x] Integración del lexer con Python.
+- [x] Interfaz gráfica desarrollada con Tkinter.
+- [x] Visualización del código fuente.
+- [x] Visualización de tokens, lexemas y líneas.
+- [x] Generación de estadísticas del análisis.
+- [x] Generación del Reporte 1 en PDF.
+- [x] Generación del Reporte 2 en PDF.
+- [x] Generación de tabla de símbolos.
+- [x] Persistencia de la tabla de símbolos en MongoDB Atlas.
+- [x] Configuración mediante variables de entorno.
+- [x] Compilación mediante Makefile.
+- [x] Programa Haskell de prueba con más de 75 líneas.
+- [x] Pruebas integrales del analizador.
+
+---
+
+## Programa Haskell de prueba
+
+### Desarrolladora del programa de prueba
+
+**Nombre:** Sandra Paola Gomez Diaz  
+**Carné:** 202408023
+
+### Contenido del programa
+
+El archivo utilizado para las pruebas se encuentra en:
+
+```text
+samples/programa_completo.hs
+```
+
+El programa incluye:
+
+- Palabras reservadas de Haskell.
+- Identificadores repetidos.
+- Números enteros.
+- Números flotantes.
+- Valores booleanos `True` y `False`.
+- Cadenas de texto.
+- Caracteres.
+- Comentarios.
+- Listas.
+- Funciones.
+- Condicionales.
+- Pattern matching.
+- Recursividad.
+- Operadores aritméticos.
+- Operadores lógicos.
+- Operadores de comparación.
+
+El programa representa un sistema sencillo de estudiantes y calificaciones utilizado como código fuente de prueba para el analizador léxico.
+
+---
+
+## Pruebas integrales
+
+Se agregó documentación para comprobar el funcionamiento del analizador utilizando el programa Haskell completo.
+
+Archivos relacionados:
+
+- `samples/programa_completo.hs`
+- `tests/validacion_programa_completo.md`
+- `docs/guia_programa_prueba.md`
+
+Estas pruebas permiten verificar que el analizador reconozca correctamente los diferentes lexemas presentes en el código fuente y genere los tokens y estadísticas correspondientes.
+
+Aspectos verificados:
+
+- [x] Programa Haskell de prueba con más de 75 líneas.
+- [x] Inclusión de enteros, flotantes, booleanos y cadenas.
+- [x] Inclusión de identificadores y palabras reservadas.
+- [x] Inclusión de más de 10 operadores.
+- [x] Documentación de la prueba integral del lexer.
+- [x] Archivo de validación del programa Haskell.

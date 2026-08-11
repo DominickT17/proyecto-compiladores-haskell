@@ -303,6 +303,7 @@ class AnalizadorGUI:
                 "Reporte 1",
                 f"Reporte generado correctamente.\n\n"
                 f"Ubicación:\n{ruta_salida}"
+                
             )
 
         except Exception as error:
@@ -361,7 +362,7 @@ class AnalizadorGUI:
 
         except Exception as error:
             messagebox.showerror(
-                "Reporte 2"
+                "Reporte 2",
                 f"NO se pudo generar el reporte:\n{error}"
             )
 
@@ -506,7 +507,7 @@ class AnalizadorGUI:
 
         tk.Button(
             botones,
-            text="Guardar MonoBD",
+            text="Guardar MongoDB",
             width=15,
             command=self.guardar_en_mongodb
         ).pack(side=tk.LEFT, padx=5)
